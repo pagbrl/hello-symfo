@@ -15,10 +15,14 @@ servers:
   - 51.75.243.60
 
 env:
-  secret:
-    - APP_ENV
-    - APP_SECRET
-    - DATABASE_URL
+  DATABASE_URL: <%= ENV.fetch("DATABASE_URL") %>
+  APP_ENV: <%= ENV.fetch("APP_ENV") %>
+  APP_SECRET: <%= ENV.fetch("APP_SECRET") %>
+
+traefik:
+  args:
+    accesslog: true
+    accesslog.format: json
 
 accessories:
   mysql:
@@ -30,6 +34,6 @@ accessories:
         POSTGRES_USER: hello
         POSTGRES_DB: hello
       secret:
-        - POSTGRES_PASSWORD
+        POSTGRES_PASSWORD: <%= ENV.fetch("POSTGRES_PASSWORD") %>
     volumes:
       - /var/lib/postgresql/data/pgdata:/var/lib/postgresql/data/pgdata

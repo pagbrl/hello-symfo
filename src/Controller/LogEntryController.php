@@ -21,6 +21,12 @@ class LogEntryController extends AbstractController
         ]);
     }
 
+    #[Route('/up', name: 'app_log_healthcheck', methods: ['GET'])]
+    public function healthcheck(LogEntryRepository $logEntryRepository): Response
+    {
+        return $this->json('OK', 200);
+    }
+
     #[Route('/new', name: 'app_log_entry_new', methods: ['GET', 'POST'])]
     public function new(Request $request, LogEntryRepository $logEntryRepository): Response
     {
