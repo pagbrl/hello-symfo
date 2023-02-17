@@ -12,12 +12,17 @@ registry:
 
 # Deploy to these servers.
 servers:
-  - 51.75.243.60
+  web:
+    hosts:
+      - <%= ENV.fetch("WEB_HOST_1") %>
+    labels:
+      traefik.http.routers.hello-symfo.rule: PathPrefix(\`/\`)
 
 env:
-  DATABASE_URL: <%= ENV.fetch("DATABASE_URL") %>
-  APP_ENV: <%= ENV.fetch("APP_ENV") %>
-  APP_SECRET: <%= ENV.fetch("APP_SECRET") %>
+  secret:
+    - DATABASE_URL
+    - APP_ENV
+    - APP_SECRET
 
 traefik:
   args:
@@ -25,15 +30,16 @@ traefik:
     accesslog.format: json
 
 accessories:
-  mysql:
-    image: postgresql:15-alpine
-    host: 51.75.243.60
+  postgresql:
+    image: postgres:15-alpine
+    host: <%= ENV.fetch("WEB_HOST_1") %>
     port: 5432
+    private: true
     env:
       clear:
         POSTGRES_USER: hello
         POSTGRES_DB: hello
       secret:
-        POSTGRES_PASSWORD: <%= ENV.fetch("POSTGRES_PASSWORD") %>
+        - POSTGRES_PASSWORD
     volumes:
-      - /var/lib/postgresql/data/pgdata:/var/lib/postgresql/data/pgdata
+      - /var/lib/postgresql/data/:/var/lib/postgresql/data/
