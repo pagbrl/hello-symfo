@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New LogEntry{% endblock %}
+
+{% block body %}
+    <h1>Create new LogEntry</h1>
+
+    {{ include('log_entry/_form.html.twig') }}
+
+    <a href="{{ path('app_log_entry_index') }}">back to list</a>
+{% endblock %}

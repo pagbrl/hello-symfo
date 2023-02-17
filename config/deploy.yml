@@ -1,0 +1,35 @@
+# Name of your application. Used to uniquely configuring Traefik and app containers.
+# Your Dockerfile should set LABEL service=the-same-value to ensure image pruning works.
+service: hello-symfo
+
+# Name of the container image.
+image: pauulog/hello-symfo
+
+registry:
+  server: docker.io
+  username: pauulog
+  password: <%= ENV.fetch("MRSK_REGISTRY_PASSWORD") %>
+
+# Deploy to these servers.
+servers:
+  - 51.75.243.60
+
+env:
+  secret:
+    - APP_ENV
+    - APP_SECRET
+    - DATABASE_URL
+
+accessories:
+  mysql:
+    image: postgresql:15-alpine
+    host: 51.75.243.60
+    port: 5432
+    env:
+      clear:
+        POSTGRES_USER: hello
+        POSTGRES_DB: hello
+      secret:
+        - POSTGRES_PASSWORD
+    volumes:
+      - /var/lib/postgresql/data/pgdata:/var/lib/postgresql/data/pgdata
