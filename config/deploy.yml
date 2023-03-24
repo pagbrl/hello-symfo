@@ -15,8 +15,6 @@ servers:
   web:
     hosts:
       - <%= ENV.fetch("WEB_HOST_1") %>
-    labels:
-      traefik.http.routers.hello-symfo.rule: PathPrefix(\`/\`)
 
 env:
   secret:
@@ -28,6 +26,10 @@ traefik:
   args:
     accesslog: true
     accesslog.format: json
+
+healthcheck:
+  path: /up
+  port: 80
 
 accessories:
   postgresql:
